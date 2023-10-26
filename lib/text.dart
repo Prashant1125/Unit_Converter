@@ -59,7 +59,6 @@ class _TestPageState extends State<TestPage> {
     }
     setState(() {
       errorMessage = errorMessage;
-      result = result;
     });
   }
 
@@ -93,28 +92,32 @@ class _TestPageState extends State<TestPage> {
               const SizedBox(
                 height: 20,
               ),
-              TextField(
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600),
-                decoration: InputDecoration(
-                  filled: true,
-                  hintText: 'Enter Any Number',
-                  hintStyle: const TextStyle(color: Colors.black),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600),
+                  decoration: InputDecoration(
+                    filled: true,
+                    hintText: 'Enter Any Number',
+                    hintStyle: const TextStyle(color: Colors.grey),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
                   ),
+                  onChanged: (text) {
+                    var input = double.tryParse(text);
+                    if (input != null) {
+                      setState(() {
+                        _userInput = input;
+                      });
+                    }
+                  },
+                  keyboardType: TextInputType.number,
                 ),
-                onChanged: (text) {
-                  var input = double.tryParse(text);
-                  if (input != null) {
-                    setState(() {
-                      _userInput = input;
-                    });
-                  }
-                },
               ),
               const SizedBox(
                 height: 20,
@@ -269,7 +272,7 @@ class _TestPageState extends State<TestPage> {
                   child: Center(
                     child: FittedBox(
                       child: Text(
-                        errorMessage.toString(),
+                        errorMessage ?? '0',
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                             fontSize: 25,
