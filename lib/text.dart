@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:pkconverter/services/admob/ad_manager.dart';
 
 class TestPage extends StatefulWidget {
   const TestPage({super.key});
@@ -62,16 +64,69 @@ class _TestPageState extends State<TestPage> {
     });
   }
 
+  BannerAd? _bannerAd;
+  bool _isLoaded = false;
+  InterstitialAd? _interstitialAd;
+
+  createInterstitialAd() {
+    InterstitialAd.load(
+        adUnitId: AdManager.interstitialAdUnitId,
+        request: const AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (InterstitialAd ad) {
+            _interstitialAd = ad;
+            print('InterstitialAd loaded: ${ad.adUnitId}');
+          },
+          onAdFailedToLoad: (LoadAdError error) {
+            print('InterstitialAd failed to load: $error');
+          },
+        ));
+  }
+
+  /// Loads a banner ad.
+  void loadAd() {
+    _bannerAd = BannerAd(
+      adUnitId: AdManager.bannerAdUnitId,
+      request: const AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        // Called when an ad is successfully received.
+        onAdLoaded: (ad) {
+          debugPrint('$ad loaded.');
+          setState(() {
+            _isLoaded = true;
+          });
+        },
+        // Called when an ad request failed.
+        onAdFailedToLoad: (ad, err) {
+          debugPrint('BannerAd failed to load: $err');
+          // Dispose the ad here to free resources.
+          ad.dispose();
+        },
+      ),
+    )..load();
+  }
+
   @override
   void initState() {
-    _userInput = 0;
     super.initState();
+    _userInput = 0;
+    loadAd();
+    createInterstitialAd();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.blue,
+        child: SizedBox(
+          width: _bannerAd?.size.width.toDouble(),
+          height: _bannerAd?.size.height.toDouble(),
+          child: AdWidget(ad: _bannerAd!),
+        ),
+      ),
       appBar: AppBar(
         toolbarHeight: 80,
         toolbarOpacity: 0.6,
@@ -136,6 +191,7 @@ class _TestPageState extends State<TestPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
+                    padding: EdgeInsets.symmetric(horizontal: 2),
                     decoration: BoxDecoration(
                       color: Colors.blue,
                       borderRadius: BorderRadiusDirectional.circular(50),
@@ -235,6 +291,7 @@ class _TestPageState extends State<TestPage> {
                         _userInput == 0) {
                     } else {
                       converter(_userInput!, _startValue!, _convertedMeasure!);
+                      if (_interstitialAd != null) _interstitialAd!.show();
                     }
                   },
                   child: Container(
