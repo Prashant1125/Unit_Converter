@@ -65,7 +65,6 @@ class _TestPageState extends State<TestPage> {
   }
 
   BannerAd? _bannerAd;
-  bool _isLoaded = false;
   InterstitialAd? _interstitialAd;
 
   createInterstitialAd() {
@@ -93,9 +92,7 @@ class _TestPageState extends State<TestPage> {
         // Called when an ad is successfully received.
         onAdLoaded: (ad) {
           debugPrint('$ad loaded.');
-          setState(() {
-            _isLoaded = true;
-          });
+          setState(() {});
         },
         // Called when an ad request failed.
         onAdFailedToLoad: (ad, err) {
