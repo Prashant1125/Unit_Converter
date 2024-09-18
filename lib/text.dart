@@ -117,7 +117,7 @@ class _TestPageState extends State<TestPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomAppBar(
-        color: Colors.blue,
+        color: Colors.white,
         child: SizedBox(
           width: _bannerAd?.size.width.toDouble(),
           height: _bannerAd?.size.height.toDouble(),
@@ -125,40 +125,31 @@ class _TestPageState extends State<TestPage> {
         ),
       ),
       appBar: AppBar(
-        toolbarHeight: 80,
-        toolbarOpacity: 0.6,
+        backgroundColor: Colors.green.shade200,
         centerTitle: true,
         title: const Text(
           'Unit Converter',
-          style: TextStyle(
-              color: Colors.white,
-              fontSize: 25,
-              fontFamily: 'times new roman',
-              fontWeight: FontWeight.bold),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Center(
+      body: Center(
+        child: SingleChildScrollView(
           child: Column(
             children: [
-              const SizedBox(
-                height: 20,
-              ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.symmetric(horizontal: 30.0),
                 child: TextField(
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                      fontSize: 20,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600),
+                    fontSize: 20,
+                    color: Colors.black,
+                  ),
                   decoration: InputDecoration(
-                    filled: true,
-                    hintText: 'Enter Any Number',
-                    hintStyle: const TextStyle(color: Colors.grey),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red.shade200),
                     ),
+                    hintText: 'Enter Number',
+                    hintStyle:
+                        const TextStyle(color: Colors.grey, fontSize: 18),
                   ),
                   onChanged: (text) {
                     var input = double.tryParse(text);
@@ -172,14 +163,14 @@ class _TestPageState extends State<TestPage> {
                 ),
               ),
               const SizedBox(
-                height: 20,
+                height: 25,
               ),
               const Text(
-                'Select Conversion',
+                'Choose Unit',
                 style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600),
+                  fontSize: 20,
+                  color: Colors.black54,
+                ),
               ),
               const SizedBox(
                 height: 10,
@@ -187,28 +178,27 @@ class _TestPageState extends State<TestPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 2),
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadiusDirectional.circular(50),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                        hint: const Text(
-                          'Choose Unit',
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.white,
-                              fontFamily: "times new roman",
-                              fontWeight: FontWeight.w800),
+                  DropdownButtonHideUnderline(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(color: Colors.black),
                         ),
-                        dropdownColor: Colors.blue,
-                        style: const TextStyle(
+                      ),
+                      child: DropdownButton(
+                        iconEnabledColor: Colors.red.shade200,
+                        iconSize: 35,
+                        alignment: AlignmentDirectional.center,
+                        hint: const Text(
+                          'From',
+                          style: TextStyle(
                             fontSize: 18,
-                            color: Colors.white,
-                            fontFamily: "times new roman",
-                            fontWeight: FontWeight.w800),
+                            color: Colors.grey,
+                          ),
+                        ),
+                        dropdownColor: Colors.green.shade200,
+                        style:
+                            const TextStyle(fontSize: 18, color: Colors.black),
                         items: fromUnits.map((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
@@ -224,41 +214,30 @@ class _TestPageState extends State<TestPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  const Text(
-                    "->",
-                    style: TextStyle(
-                        fontFamily: "bold",
-                        fontSize: 20,
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(
-                    width: 5,
+                  SizedBox(
+                    width: 15,
                   ),
                   Container(
                     decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadiusDirectional.circular(50),
+                      border: Border(
+                        bottom: BorderSide(color: Colors.black),
+                      ),
                     ),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton(
+                        iconEnabledColor: Colors.red.shade200,
+                        iconSize: 35,
+                        alignment: AlignmentDirectional.center,
                         hint: const Text(
-                          'Choose Unit',
+                          'To',
                           style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.white,
-                              fontFamily: "times new roman",
-                              fontWeight: FontWeight.w800),
-                        ),
-                        dropdownColor: Colors.blue,
-                        style: const TextStyle(
                             fontSize: 18,
-                            color: Colors.white,
-                            fontFamily: "times new roman",
-                            fontWeight: FontWeight.w800),
+                            color: Colors.grey,
+                          ),
+                        ),
+                        dropdownColor: Colors.green.shade200,
+                        style:
+                            const TextStyle(fontSize: 18, color: Colors.black),
                         items: fromUnits.map((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
@@ -281,7 +260,7 @@ class _TestPageState extends State<TestPage> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
-                child: TextButton(
+                child: ElevatedButton(
                   onPressed: () {
                     if (_startValue!.isEmpty ||
                         _convertedMeasure!.isEmpty ||
@@ -291,21 +270,13 @@ class _TestPageState extends State<TestPage> {
                       if (_interstitialAd != null) _interstitialAd!.show();
                     }
                   },
-                  child: Container(
-                    alignment: AlignmentDirectional.center,
-                    width: 200,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 89, 100, 255),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Text(
-                      'Convert',
-                      style: TextStyle(
-                          fontSize: 25,
-                          color: Colors.white,
-                          fontFamily: "times new roman",
-                          fontWeight: FontWeight.w800),
+                  style: ElevatedButton.styleFrom(
+                      elevation: 10, backgroundColor: Colors.red.shade200),
+                  child: const Text(
+                    'Convert',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
                     ),
                   ),
                 ),
@@ -320,20 +291,14 @@ class _TestPageState extends State<TestPage> {
               Card(
                 elevation: 5,
                 child: Container(
-                  padding: const EdgeInsets.all(8),
+                  alignment: AlignmentDirectional.center,
                   width: 300,
                   height: 150,
-                  child: Center(
-                    child: FittedBox(
-                      child: Text(
-                        errorMessage ?? '0',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            fontSize: 25,
-                            fontFamily: "times new roman",
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
+                  child: Text(
+                    errorMessage ?? '0',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        fontSize: 25, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
